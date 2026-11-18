@@ -60,3 +60,4 @@ La tabla también se crea sola en la primera petición si no existe.
    ```
 
 Variables de entorno: `DATABASE_URL` (o `POSTGRES_URL`), `ADMIN_PASSWORD`, `SESSION_SECRET` (opcional; si falta se usa `ADMIN_PASSWORD`).
+
