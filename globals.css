@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  /* Azul claro como color principal */
+  --color-marca-50: #f0f8ff;
+  --color-marca-100: #dff0fe;
+  --color-marca-200: #b8e2fd;
+  --color-marca-300: #7acbfb;
+  --color-marca-400: #38b1f6;
+  --color-marca-500: #0e96e6;
+  --color-marca-600: #0277c3;
+  --color-marca-700: #035f9e;
+  --color-marca-800: #075183;
+  --color-marca-900: #0c446c;
+}
+
+/* Letra grande: 18px de base, todo el diseño escala con rem. */
+html {
+  font-size: 112.5%;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #f7fbff;
+  color: #0f172a;
+}
+
+/* Barra horizontal de días sin scrollbar visible */
+.sin-scrollbar {
+  scrollbar-width: none;
+}
+.sin-scrollbar::-webkit-scrollbar {
+  display: none;
+}
