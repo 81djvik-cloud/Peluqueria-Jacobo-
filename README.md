@@ -19,9 +19,9 @@ Todas las fechas y horas se calculan en **Europe/Madrid**.
 
 ## Reglas de negocio
 
-- Horas cada 15 min, de 09:00 a 14:00 y de 16:00 a 20:30. Una cita tiene que **terminar** dentro de la franja:
-  un servicio de 15 min puede empezar como muy tarde a las 13:45 / 20:15; uno de 30 min, a las 13:30 / 20:00.
-- Abierto de lunes a sábado; el domingo, cerrado. Se puede reservar con hasta 14 días de antelación.
+- Horas cada 15 min según el horario real: **lunes a viernes** de 9:30 a 14:00 y de 16:30 a 20:30; **sábado** de 9:00 a 14:30;
+  **domingo** cerrado. Una cita tiene que **terminar** dentro de la franja (un servicio de 30 min puede empezar como muy
+  tarde a las 13:30 / 20:00 entre semana y a las 14:00 el sábado). Se puede reservar con hasta 14 días de antelación.
 - Solo se muestran horas libres y futuras. Un servicio de 30 min ocupa dos huecos de 15.
 - **Sin dobles reservas:** además de comprobarlo en el servidor, Postgres tiene una restricción de exclusión
   (`EXCLUDE USING gist (tsrange(inicio, fin) WITH &&)`). Si dos personas confirman la misma hora a la vez, solo entra una;
@@ -30,7 +30,7 @@ Todas las fechas y horas se calculan en **Europe/Madrid**.
   de Madrid se marca como *Atendida · auto*. El dueño puede marcarla como atendida antes a mano. Las citas canceladas
   liberan la hora. El panel se recarga solo cada minuto.
 
-Los servicios están en `src/lib/servicios.ts`, los datos del negocio en `src/lib/negocio.ts` y el horario en `src/lib/horario.ts`.
+Los servicios están en `src/lib/servicios.ts`, los datos del negocio en `src/lib/negocio.ts` y el horario por día de la semana en `src/lib/horario.ts` (`HORARIO_SEMANAL`).
 
 ## Desarrollo local
 

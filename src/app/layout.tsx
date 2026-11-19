@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     default: `${NEGOCIO.nombre} · Reserva tu cita`,
     template: `%s · ${NEGOCIO.nombre}`,
   },
-  description: `${NEGOCIO.lema} Reserva tu cita online en menos de un minuto.`,
+  description: `Peluquería de hombre y niño en Palencia. ${NEGOCIO.lemas.join(". ")}. Reserva tu cita online en menos de un minuto.`,
 };
 
 export const viewport: Viewport = {

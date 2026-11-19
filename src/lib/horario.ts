@@ -8,14 +8,26 @@ export const ZONA = "Europe/Madrid";
 export const INTERVALO_MIN = 15;
 export const DIAS_RESERVABLES = 14;
 
-/** Franjas de apertura en minutos desde medianoche: [inicio, fin). */
-export const FRANJAS: ReadonlyArray<readonly [number, number]> = [
-  [9 * 60, 14 * 60], // 09:00 – 14:00
-  [16 * 60, 20 * 60 + 30], // 16:00 – 20:30
-];
+type Franja = readonly [number, number];
+const h = (horas: number, minutos = 0) => horas * 60 + minutos;
 
-/** 0 = domingo … 6 = sábado. Domingo cerrado. */
-export const DIAS_CERRADOS = new Set([0]);
+/** Franjas de apertura (minutos desde medianoche, [inicio, fin)) por día de la semana. */
+const LABORABLE: Franja[] = [
+  [h(9, 30), h(14)], // 09:30 – 14:00
+  [h(16, 30), h(20, 30)], // 16:30 – 20:30
+];
+const SABADO: Franja[] = [[h(9), h(14, 30)]]; // 09:00 – 14:30
+
+/** Índice 0 = domingo … 6 = sábado. */
+export const HORARIO_SEMANAL: ReadonlyArray<ReadonlyArray<Franja>> = [
+  [], // domingo: cerrado
+  LABORABLE, // lunes
+  LABORABLE, // martes
+  LABORABLE, // miércoles
+  LABORABLE, // jueves
+  LABORABLE, // viernes
+  SABADO, // sábado
+];
 
 const DIAS = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
 const DIAS_CORTOS = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
@@ -69,8 +81,12 @@ export function diaSemana(fecha: string): number {
   return aUTC(fecha).getUTCDay();
 }
 
+export function franjasDelDia(fecha: string): ReadonlyArray<Franja> {
+  return HORARIO_SEMANAL[diaSemana(fecha)];
+}
+
 export function estaAbierto(fecha: string): boolean {
-  return !DIAS_CERRADOS.has(diaSemana(fecha));
+  return franjasDelDia(fecha).length > 0;
 }
 
 export function nombreDia(fecha: string): string {
@@ -114,10 +130,10 @@ export function horaAMinutos(hora: string): number | null {
   return m ? Number(m[1]) * 60 + Number(m[2]) : null;
 }
 
-/** Todas las horas de inicio posibles para un servicio de `duracion` minutos. */
-export function horasPosibles(duracion: number): number[] {
+/** Horas de inicio posibles un día para un servicio de `duracion` minutos (debe acabar dentro de la franja). */
+export function horasPosibles(fecha: string, duracion: number): number[] {
   const horas: number[] = [];
-  for (const [ini, fin] of FRANJAS) {
+  for (const [ini, fin] of franjasDelDia(fecha)) {
     for (let t = ini; t + duracion <= fin; t += INTERVALO_MIN) horas.push(t);
   }
   return horas;
@@ -133,7 +149,7 @@ export function horasLibres(
   ahora: AhoraMadrid = ahoraMadrid(),
 ): number[] {
   if (!estaAbierto(fecha) || fecha < ahora.fecha) return [];
-  return horasPosibles(duracion).filter((t) => {
+  return horasPosibles(fecha, duracion).filter((t) => {
     if (fecha === ahora.fecha && t <= ahora.minutos) return false;
     return !ocupados.some((o) => t < o.fin && o.inicio < t + duracion);
   });
@@ -146,7 +162,7 @@ export function diasReservables(ahora: AhoraMadrid = ahoraMadrid()): string[] {
     const f = sumarDias(ahora.fecha, i);
     if (!estaAbierto(f)) continue;
     // Hoy solo cuenta si aún queda alguna hora por delante.
-    if (i === 0 && !horasPosibles(INTERVALO_MIN).some((t) => t > ahora.minutos)) continue;
+    if (i === 0 && !horasPosibles(f, INTERVALO_MIN).some((t) => t > ahora.minutos)) continue;
     dias.push(f);
   }
   return dias;

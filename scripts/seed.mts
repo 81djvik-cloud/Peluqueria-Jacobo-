@@ -6,7 +6,7 @@
  */
 import postgres from "postgres";
 import { SCHEMA_SQL } from "../src/lib/schema.ts";
-import { ahoraMadrid, diasReservables, horaAMinutos, minutosAHora, sumarDias, estaAbierto } from "../src/lib/horario.ts";
+import { ahoraMadrid, diasReservables, horaAMinutos, horasPosibles, minutosAHora, sumarDias, estaAbierto } from "../src/lib/horario.ts";
 import { getServicio } from "../src/lib/servicios.ts";
 
 const url = process.env.DATABASE_URL ?? process.env.POSTGRES_URL;
@@ -36,14 +36,14 @@ const CLIENTES: [string, string][] = [
 // [hora, servicio] por día. Se van rotando clientes.
 const AGENDA: [string, string][][] = [
   [
-    ["09:00", "corte"], ["09:30", "corte-barba"], ["10:15", "maquina"], ["11:00", "lavado-corte"],
-    ["12:00", "navaja"], ["13:15", "corte"], ["16:00", "corte-barba"], ["17:00", "corte"],
+    ["09:30", "corte"], ["10:00", "corte-barba"], ["10:45", "maquina"], ["11:15", "lavado-corte"],
+    ["12:15", "navaja"], ["13:30", "corte"], ["16:30", "corte-barba"], ["17:15", "corte"],
     ["17:45", "maquina"], ["18:30", "lavado-corte"], ["19:30", "navaja"], ["20:00", "corte"],
   ],
-  [["09:15", "maquina"], ["10:00", "corte-barba"], ["12:30", "corte"], ["16:30", "navaja"], ["18:00", "corte"], ["19:15", "lavado-corte"]],
+  [["09:30", "maquina"], ["10:15", "corte-barba"], ["12:30", "corte"], ["16:45", "navaja"], ["18:00", "corte"], ["19:15", "lavado-corte"]],
   [["09:45", "corte"], ["11:30", "lavado-corte"], ["13:00", "maquina"], ["17:15", "corte-barba"], ["19:00", "corte"]],
-  [["10:30", "navaja"], ["12:15", "corte"], ["16:15", "maquina"], ["18:45", "corte-barba"]],
-  [["09:00", "corte-barba"], ["11:45", "corte"], ["17:30", "lavado-corte"]],
+  [["10:30", "navaja"], ["12:15", "corte"], ["16:30", "maquina"], ["18:45", "corte-barba"]],
+  [["09:30", "corte-barba"], ["11:45", "corte"], ["17:30", "lavado-corte"]],
 ];
 
 async function main() {
@@ -74,6 +74,7 @@ async function main() {
   const insertar = async (fecha: string, hora: string, servicioId: string, estado: string) => {
     const s = getServicio(servicioId)!;
     const ini = horaAMinutos(hora)!;
+    if (!horasPosibles(fecha, s.duracion).includes(ini)) return; // fuera del horario de ese día
     const [nombre, tel] = CLIENTES[c++ % CLIENTES.length];
     await sql`
       INSERT INTO reservas (servicio_id, servicio_nombre, precio, duracion_min, inicio, fin,
