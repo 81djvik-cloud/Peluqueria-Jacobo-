@@ -16,7 +16,7 @@ export function Cabecera() {
           href="/servicios"
           className="flex shrink-0 items-center gap-2 rounded-xl py-1 pl-1 pr-2 font-extrabold text-slate-900 hover:bg-marca-50"
         >
-          <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-marca-100 text-marca-700">
+          <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-marca-500 text-white">
             <IconoLista className="size-5" />
           </span>
           <span className="text-base sm:text-lg">Servicios</span>

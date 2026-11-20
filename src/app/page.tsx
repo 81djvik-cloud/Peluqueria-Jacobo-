@@ -1,7 +1,13 @@
 import Link from "next/link";
 import { NEGOCIO } from "@/lib/negocio";
 import { SERVICIOS, formatPrecio } from "@/lib/servicios";
-import { IconoCalendario, IconoTelefono, IconoTijeras, IconoUbicacion } from "@/components/Iconos";
+import {
+  IconoCalendario,
+  IconoReloj,
+  IconoTelefono,
+  IconoTijeras,
+  IconoUbicacion,
+} from "@/components/Iconos";
 
 export default function Inicio() {
   const desde = SERVICIOS[0].precio;
@@ -30,16 +36,6 @@ export default function Inicio() {
 
       <section className="grid gap-4 sm:grid-cols-2">
         <div className="rounded-2xl bg-white p-6 ring-1 ring-slate-200">
-          <IconoTijeras className="mb-3 size-7 text-marca-600" />
-          <h2 className="text-lg font-bold">Hombre y niño</h2>
-          <p className="mt-1 text-slate-600">
-            Cortes desde {formatPrecio(desde)}.{" "}
-            <Link href="/servicios" className="font-semibold text-marca-700 underline-offset-2 hover:underline">
-              Ver servicios
-            </Link>
-          </p>
-        </div>
-        <div className="rounded-2xl bg-white p-6 ring-1 ring-slate-200">
           <IconoUbicacion className="mb-3 size-7 text-marca-600" />
           <h2 className="text-lg font-bold">Dónde estamos</h2>
           <a
@@ -48,7 +44,11 @@ export default function Inicio() {
             rel="noopener noreferrer"
             className="mt-1 block text-slate-700 underline-offset-2 hover:underline"
           >
-            {NEGOCIO.direccion}
+            {NEGOCIO.direccionLineas.map((linea) => (
+              <span key={linea} className="block">
+                {linea}
+              </span>
+            ))}
           </a>
           <a
             href={`tel:${NEGOCIO.telefonoHref}`}
@@ -57,14 +57,29 @@ export default function Inicio() {
             <IconoTelefono className="size-5" />
             {NEGOCIO.telefono}
           </a>
-          <h3 className="mt-5 font-bold text-slate-800">Horario</h3>
-          <ul className="mt-1 space-y-1 text-slate-600">
-            {NEGOCIO.horarioTexto.map((h) => (
-              <li key={h.dias}>
-                <span className="font-semibold text-slate-800">{h.dias}:</span> {h.horas}
-              </li>
-            ))}
-          </ul>
+
+          <div className="mt-6 border-t border-slate-100 pt-6">
+            <IconoReloj className="mb-3 size-7 text-marca-600" />
+            <h2 className="text-lg font-bold">Horario</h2>
+            <dl className="mt-1 space-y-3 text-slate-600">
+              {NEGOCIO.horarioTexto.map((h) => (
+                <div key={h.dias}>
+                  <dt className="font-semibold text-slate-800">{h.dias}:</dt>
+                  <dd>{h.horas}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </div>
+        <div className="rounded-2xl bg-white p-6 ring-1 ring-slate-200">
+          <IconoTijeras className="mb-3 size-7 text-marca-600" />
+          <h2 className="text-lg font-bold">Hombre y niño</h2>
+          <p className="mt-1 text-slate-600">
+            Cortes desde {formatPrecio(desde)}.{" "}
+            <Link href="/servicios" className="font-semibold text-marca-700 underline-offset-2 hover:underline">
+              Ver servicios
+            </Link>
+          </p>
         </div>
       </section>
     </div>
