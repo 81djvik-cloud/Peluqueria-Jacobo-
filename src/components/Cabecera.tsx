@@ -25,8 +25,12 @@ function CabeceraSegunRuta() {
 
 function Barra({ enPortada }: { enPortada: boolean }) {
   return (
-    <header className="sticky top-0 z-20 border-b border-marca-100 bg-white/90 backdrop-blur">
+    <header className="sticky top-0 z-30 border-b border-marca-100 bg-white">
       <div className="mx-auto flex max-w-2xl items-center justify-between gap-3 px-4 pb-4 pt-3 sm:px-6">
+        <a href={`tel:${NEGOCIO.telefonoHref}`} className={BOTON} aria-label={`Llamar al ${NEGOCIO.telefono}`}>
+          <IconoTelefono className="size-5" />
+          Llamar
+        </a>
         {enPortada ? (
           <Link href="/servicios" className={BOTON}>
             <IconoLista className="size-5" />
@@ -38,10 +42,6 @@ function Barra({ enPortada }: { enPortada: boolean }) {
             Inicio
           </Link>
         )}
-        <a href={`tel:${NEGOCIO.telefonoHref}`} className={BOTON} aria-label={`Llamar al ${NEGOCIO.telefono}`}>
-          <IconoTelefono className="size-5" />
-          Llamar
-        </a>
       </div>
     </header>
   );

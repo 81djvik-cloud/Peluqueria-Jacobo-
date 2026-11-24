@@ -122,7 +122,16 @@ export function ReservaForm({
   const manana = horas.filter((h) => h < "15:00");
   const tarde = horas.filter((h) => h >= "15:00");
   const diaElegido = dias.find((d) => d.fecha === fecha);
-  const listo = Boolean(servicio && fecha && hora && nombre.trim().length >= 2 && telefono.trim());
+  const faltan = [
+    !servicio && "servicio",
+    !fecha && "día",
+    !hora && "hora",
+    nombre.trim().length < 2 && "nombre",
+    !telefono.trim() && "teléfono",
+  ].filter((x): x is string => Boolean(x));
+  const listo = faltan.length === 0;
+  const textoFalta =
+    faltan.length > 1 ? `${faltan.slice(0, -1).join(", ")} y ${faltan.at(-1)}` : faltan[0];
 
   if (dias.length === 0) {
     return (
@@ -282,6 +291,11 @@ export function ReservaForm({
         >
           {enviando ? "Reservando…" : "Confirmar cita"}
         </button>
+        {!listo && (
+          <p className="mt-3 text-center text-base font-semibold text-amber-700" aria-live="polite">
+            Falta: {textoFalta}
+          </p>
+        )}
       </div>
     </form>
   );

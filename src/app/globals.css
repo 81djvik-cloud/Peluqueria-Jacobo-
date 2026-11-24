@@ -97,10 +97,14 @@ body {
     inset 0 2px 5px rgb(7 81 131 / 0.45);
 }
 
-/* Desactivado: plano y gris */
+/* Desactivado: mantiene el relieve, pero en gris y sin hundirse */
 .boton-3d:disabled {
-  background: var(--color-slate-300);
-  box-shadow: none;
+  color: #fff;
+  background: linear-gradient(to bottom, var(--color-slate-300), var(--color-slate-400));
+  box-shadow:
+    0 5px 0 0 var(--color-slate-500),
+    0 9px 16px -6px rgb(100 116 139 / 0.45),
+    inset 0 1px 0 rgb(255 255 255 / 0.3);
   cursor: not-allowed;
 }
 
