@@ -10,10 +10,8 @@ function Boton({ children, variante }: { children: React.ReactNode; variante: "o
     <button
       type="submit"
       disabled={pending}
-      className={`flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-base font-bold transition disabled:opacity-50 ${
-        variante === "ok"
-          ? "bg-emerald-600 text-white hover:bg-emerald-700"
-          : "bg-white text-red-700 ring-1 ring-red-200 hover:bg-red-50"
+      className={`flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-base font-bold disabled:opacity-50 ${
+        variante === "ok" ? "boton-3d-verde" : "boton-3d-claro text-red-700"
       }`}
     >
       {children}

@@ -72,31 +72,31 @@ async function Panel({ searchParams }: Pick<PageProps<"/panel">, "searchParams">
           </p>
         </div>
         <form action={logoutAction}>
-          <button className="rounded-xl px-3 py-2 text-base font-semibold text-slate-600 ring-1 ring-slate-200 hover:bg-white">
+          <button className="boton-3d-claro rounded-xl px-3 py-2 text-base font-semibold text-slate-600">
             Salir
           </button>
         </form>
       </header>
 
-      <nav className="grid grid-cols-3 gap-2" aria-label="Cambiar de día">
+      <nav className="grid grid-cols-3 gap-2 pb-1" aria-label="Cambiar de día">
         <Link
           href={`/panel?fecha=${sumarDias(fecha, -1)}`}
-          className="flex items-center justify-center gap-1 rounded-xl bg-white px-1 py-3 text-sm font-semibold sm:text-base ring-1 ring-slate-200 hover:ring-marca-400"
+          className="boton-3d-claro flex items-center justify-center gap-1 rounded-xl px-1 py-3 text-sm font-semibold sm:text-base"
         >
           <IconoFlechaIzq className="size-4" /> Anterior
         </Link>
         <Link
           href="/panel"
           aria-current={esHoy ? "page" : undefined}
-          className={`flex items-center justify-center rounded-xl py-3 text-base font-bold ring-1 ${
-            esHoy ? "bg-marca-600 text-white ring-marca-600" : "bg-white ring-slate-200 hover:ring-marca-400"
+          className={`flex items-center justify-center rounded-xl py-3 text-base font-bold ${
+            esHoy ? "pulsado" : "boton-3d-claro"
           }`}
         >
           Hoy
         </Link>
         <Link
           href={`/panel?fecha=${sumarDias(fecha, 1)}`}
-          className="flex items-center justify-center gap-1 rounded-xl bg-white px-1 py-3 text-sm font-semibold sm:text-base ring-1 ring-slate-200 hover:ring-marca-400"
+          className="boton-3d-claro flex items-center justify-center gap-1 rounded-xl px-1 py-3 text-sm font-semibold sm:text-base"
         >
           Siguiente <IconoFlecha className="size-4" />
         </Link>

@@ -18,7 +18,7 @@ export default function Servicios() {
           <li key={s.id}>
             <Link
               href={`/reservar?servicio=${s.id}`}
-              className="group flex items-center justify-between gap-4 rounded-2xl bg-white p-5 ring-1 ring-slate-200 transition hover:ring-2 hover:ring-marca-400"
+              className="boton-3d-claro group flex items-center justify-between gap-4 rounded-2xl p-5"
             >
               <div>
                 <h2 className="text-xl font-bold">{s.nombre}</h2>
@@ -35,7 +35,7 @@ export default function Servicios() {
 
       <Link
         href="/reservar"
-        className="flex w-full items-center justify-center rounded-2xl bg-marca-600 px-6 py-5 text-xl font-bold text-white shadow-lg shadow-marca-600/25 transition hover:bg-marca-700 active:scale-[0.98]"
+        className="boton-3d flex w-full items-center justify-center rounded-2xl px-6 py-5 text-xl font-bold"
       >
         Reservar cita
       </Link>

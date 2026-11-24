@@ -1,26 +1,47 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Suspense } from "react";
 import { NEGOCIO } from "@/lib/negocio";
-import { IconoLista, IconoTijeras } from "./Iconos";
+import { IconoCasa, IconoLista, IconoTelefono } from "./Iconos";
+
+const BOTON =
+  "boton-3d flex shrink-0 items-center gap-2 rounded-xl py-2 pl-2.5 pr-3.5 text-base font-extrabold";
 
 export function Cabecera() {
+  // La ruta se conoce al pedir la página; mientras, se muestra «Inicio»,
+  // que es lo correcto en todas las páginas salvo la portada.
+  return (
+    <Suspense fallback={<Barra enPortada={false} />}>
+      <CabeceraSegunRuta />
+    </Suspense>
+  );
+}
+
+function CabeceraSegunRuta() {
+  return <Barra enPortada={usePathname() === "/"} />;
+}
+
+function Barra({ enPortada }: { enPortada: boolean }) {
   return (
     <header className="sticky top-0 z-20 border-b border-marca-100 bg-white/90 backdrop-blur">
-      <div className="mx-auto flex max-w-2xl items-center justify-between gap-4 px-4 py-3 max-[359px]:gap-3 max-[359px]:px-3 sm:px-6">
-        <Link href="/" className="flex min-w-0 items-center gap-2 font-extrabold text-slate-900">
-          <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-marca-500 text-white">
-            <IconoTijeras className="size-5" />
-          </span>
-          <span className="text-base leading-tight sm:text-lg">{NEGOCIO.nombre}</span>
-        </Link>
-        <Link
-          href="/servicios"
-          className="flex shrink-0 items-center gap-2 rounded-xl py-1 pl-1 pr-2 font-extrabold max-[359px]:gap-1.5 max-[359px]:pr-0 text-slate-900 hover:bg-marca-50"
-        >
-          <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-marca-500 text-white max-[359px]:size-8">
+      <div className="mx-auto flex max-w-2xl items-center justify-between gap-3 px-4 pb-4 pt-3 sm:px-6">
+        {enPortada ? (
+          <Link href="/servicios" className={BOTON}>
             <IconoLista className="size-5" />
-          </span>
-          <span className="text-base sm:text-lg">Servicios</span>
-        </Link>
+            Servicios
+          </Link>
+        ) : (
+          <Link href="/" className={BOTON}>
+            <IconoCasa className="size-5" />
+            Inicio
+          </Link>
+        )}
+        <a href={`tel:${NEGOCIO.telefonoHref}`} className={BOTON} aria-label={`Llamar al ${NEGOCIO.telefono}`}>
+          <IconoTelefono className="size-5" />
+          Llamar
+        </a>
       </div>
     </header>
   );

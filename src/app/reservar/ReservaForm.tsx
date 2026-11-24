@@ -140,7 +140,7 @@ export function ReservaForm({
 
       {/* 1. Servicio */}
       <Paso numero={1} titulo="Servicio">
-        <div className="grid gap-3" role="radiogroup" aria-label="Servicio">
+        <div className="grid gap-4" role="radiogroup" aria-label="Servicio">
           {SERVICIOS.map((s) => {
             const activo = s.id === servicioId;
             return (
@@ -150,10 +150,8 @@ export function ReservaForm({
                 role="radio"
                 aria-checked={activo}
                 onClick={() => setServicioId(s.id)}
-                className={`flex items-center justify-between rounded-2xl px-5 py-4 text-left text-lg transition ${
-                  activo
-                    ? "bg-marca-600 font-bold text-white shadow-md shadow-marca-600/25"
-                    : "bg-white font-semibold text-slate-800 ring-1 ring-slate-200 hover:ring-marca-400"
+                className={`flex items-center justify-between rounded-2xl px-5 py-4 text-left text-lg ${
+                  activo ? "pulsado font-bold" : "boton-3d-claro font-semibold text-marca-700"
                 }`}
               >
                 <span>{s.nombre}</span>
@@ -166,7 +164,7 @@ export function ReservaForm({
 
       {/* 2. Día */}
       <Paso numero={2} titulo="Día">
-        <div className="sin-scrollbar -mx-5 flex gap-3 overflow-x-auto px-5 pb-1 sm:mx-0 sm:px-0">
+        <div className="sin-scrollbar -mx-5 flex gap-3 overflow-x-auto px-5 pb-3 pt-1 sm:mx-0 sm:px-1">
           {dias.map((d) => {
             const activo = d.fecha === fecha;
             return (
@@ -175,10 +173,8 @@ export function ReservaForm({
                 type="button"
                 aria-pressed={activo}
                 onClick={() => setFecha(d.fecha)}
-                className={`flex min-w-[4.75rem] shrink-0 flex-col items-center rounded-2xl px-3 py-3 transition ${
-                  activo
-                    ? "bg-marca-600 text-white shadow-md shadow-marca-600/25"
-                    : "bg-white text-slate-800 ring-1 ring-slate-200 hover:ring-marca-400"
+                className={`flex min-w-[4.75rem] shrink-0 flex-col items-center rounded-2xl px-3 py-3 ${
+                  activo ? "pulsado" : "boton-3d-claro text-marca-700"
                 }`}
               >
                 <span className={`text-sm font-semibold ${activo ? "text-marca-50" : "text-slate-500"}`}>
@@ -231,7 +227,7 @@ export function ReservaForm({
       <Paso numero={4} titulo="Tus datos" refSeccion={refDatos}>
         <div className="space-y-5">
           <label className="block">
-            <span className="mb-2 block text-base font-semibold text-slate-700">Nombre</span>
+            <span className="mb-2 block text-base font-semibold text-marca-700">Nombre</span>
             <input
               name="nombre"
               value={nombre}
@@ -244,7 +240,7 @@ export function ReservaForm({
             />
           </label>
           <label className="block">
-            <span className="mb-2 block text-base font-semibold text-slate-700">Teléfono</span>
+            <span className="mb-2 block text-base font-semibold text-marca-700">Teléfono</span>
             <input
               name="telefono"
               type="tel"
@@ -271,7 +267,7 @@ export function ReservaForm({
         <p className="mb-3 min-h-[1.5em] text-base text-slate-600" aria-live="polite">
           {servicio ? (
             <>
-              <span className="font-bold text-slate-900">{servicio.nombre}</span>
+              <span className="font-bold text-marca-700">{servicio.nombre}</span>
               {diaElegido && <> · {diaElegido.etiqueta} {diaElegido.dia} {diaElegido.mes}</>}
               {hora && <> · {hora} h</>} · {formatPrecio(servicio.precio)}
             </>
@@ -282,7 +278,7 @@ export function ReservaForm({
         <button
           type="submit"
           disabled={!listo || enviando}
-          className="w-full rounded-2xl bg-marca-600 px-6 py-5 text-xl font-bold text-white shadow-lg shadow-marca-600/25 transition hover:bg-marca-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
+          className="boton-3d w-full rounded-2xl px-6 py-5 text-xl font-bold"
         >
           {enviando ? "Reservando…" : "Confirmar cita"}
         </button>
@@ -330,7 +326,7 @@ function GrupoHoras({
   return (
     <div>
       <h3 className="mb-2 text-base font-semibold text-slate-500">{titulo}</h3>
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-4 gap-x-2 gap-y-3">
         {horas.map((h) => {
           const activo = h === hora;
           return (
@@ -339,10 +335,8 @@ function GrupoHoras({
               type="button"
               aria-pressed={activo}
               onClick={() => onElegir(h)}
-              className={`rounded-xl py-3 text-lg font-bold tabular-nums transition ${
-                activo
-                  ? "bg-marca-600 text-white shadow-md shadow-marca-600/25"
-                  : "bg-white text-slate-800 ring-1 ring-slate-200 hover:ring-marca-400"
+              className={`rounded-xl py-3 text-lg font-bold tabular-nums ${
+                activo ? "pulsado" : "boton-3d-claro text-marca-700"
               }`}
             >
               {h}
@@ -355,5 +349,5 @@ function GrupoHoras({
 }
 
 function Aviso({ children }: { children: React.ReactNode }) {
-  return <p className="rounded-2xl bg-marca-50 px-5 py-4 text-lg text-slate-700 ring-1 ring-marca-100">{children}</p>;
+  return <p className="rounded-2xl bg-marca-50 px-5 py-4 text-lg text-marca-700 ring-1 ring-marca-100">{children}</p>;
 }

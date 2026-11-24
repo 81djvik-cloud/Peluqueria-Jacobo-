@@ -57,10 +57,10 @@ async function Resumen({ params }: Pick<PageProps<"/reserva/[id]">, "params">) {
       </dl>
 
       {!cancelada && (
-        <div className="space-y-3">
+        <div className="space-y-4">
           <a
             href={`/api/reservas/${r.id}/calendario`}
-            className="flex w-full items-center justify-center gap-3 rounded-2xl bg-marca-600 px-6 py-5 text-xl font-bold text-white shadow-lg shadow-marca-600/25 transition hover:bg-marca-700 active:scale-[0.98]"
+            className="boton-3d flex w-full items-center justify-center gap-3 rounded-2xl px-6 py-5 text-xl font-bold"
           >
             <IconoCalendario className="size-6" />
             Añadir al calendario
@@ -69,7 +69,7 @@ async function Resumen({ params }: Pick<PageProps<"/reserva/[id]">, "params">) {
             href={enlaceGoogleCalendar(r)}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex w-full items-center justify-center rounded-2xl bg-white px-6 py-4 text-lg font-bold text-marca-700 ring-1 ring-marca-200 transition hover:bg-marca-50"
+            className="boton-3d-claro flex w-full items-center justify-center rounded-2xl px-6 py-4 text-lg font-bold text-marca-700"
           >
             Usar Google Calendar
           </a>
@@ -84,7 +84,7 @@ async function Resumen({ params }: Pick<PageProps<"/reserva/[id]">, "params">) {
         .
       </p>
       <p className="text-center">
-        <Link href="/" className="text-lg font-semibold text-slate-700 underline-offset-4 hover:underline">
+        <Link href="/" className="text-lg font-semibold text-marca-700 underline-offset-4 hover:underline">
           Volver al inicio
         </Link>
       </p>
@@ -96,7 +96,7 @@ function Fila({ etiqueta, valor, destacado }: { etiqueta: string; valor: string;
   return (
     <div className="flex items-baseline justify-between gap-4 py-4">
       <dt className="text-base text-slate-500">{etiqueta}</dt>
-      <dd className={`text-right ${destacado ? "text-xl font-extrabold text-slate-900" : "text-lg font-semibold text-slate-800"}`}>
+      <dd className={`text-right ${destacado ? "text-xl font-extrabold text-marca-700" : "text-lg font-semibold text-marca-700"}`}>
         {valor}
       </dd>
     </div>

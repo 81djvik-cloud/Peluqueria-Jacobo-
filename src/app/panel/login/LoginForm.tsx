@@ -8,7 +8,7 @@ export function LoginForm() {
   return (
     <form action={accion} className="space-y-5 rounded-3xl bg-white p-6 ring-1 ring-slate-200">
       <label className="block">
-        <span className="mb-2 block text-base font-semibold text-slate-700">Contraseña</span>
+        <span className="mb-2 block text-base font-semibold text-marca-700">Contraseña</span>
         <input
           type="password"
           name="password"
@@ -26,7 +26,7 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={enviando}
-        className="w-full rounded-2xl bg-marca-600 px-6 py-4 text-xl font-bold text-white transition hover:bg-marca-700 disabled:bg-slate-300"
+        className="boton-3d w-full rounded-2xl px-6 py-4 text-xl font-bold"
       >
         {enviando ? "Entrando…" : "Entrar"}
       </button>

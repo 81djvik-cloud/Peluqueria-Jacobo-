@@ -24,7 +24,84 @@ html {
 
 body {
   background: #f7fbff;
-  color: #0f172a;
+  color: var(--color-marca-700);
+}
+
+/* ---------- Botones con relieve (3D) y efecto de pulsado ---------- */
+.boton-3d,
+.boton-3d-claro,
+.boton-3d-verde {
+  position: relative;
+  transition:
+    transform 80ms ease-out,
+    box-shadow 80ms ease-out,
+    background-color 150ms;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.boton-3d {
+  color: #fff;
+  background: linear-gradient(to bottom, var(--color-marca-500), var(--color-marca-600));
+  box-shadow:
+    0 5px 0 0 var(--color-marca-800),
+    0 9px 16px -6px rgb(3 95 158 / 0.55),
+    inset 0 1px 0 rgb(255 255 255 / 0.25);
+}
+
+.boton-3d-claro {
+  background: linear-gradient(to bottom, #fff, var(--color-marca-50));
+  box-shadow:
+    0 0 0 1px var(--color-marca-200),
+    0 4px 0 0 var(--color-marca-200),
+    0 7px 12px -6px rgb(3 95 158 / 0.3);
+}
+
+.boton-3d-verde {
+  color: #fff;
+  background: linear-gradient(to bottom, #10b981, #059669);
+  box-shadow:
+    0 4px 0 0 #047857,
+    0 7px 12px -6px rgb(4 120 87 / 0.5),
+    inset 0 1px 0 rgb(255 255 255 / 0.25);
+}
+
+/* Al pulsar: el botón se hunde */
+.boton-3d:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow:
+    0 1px 0 0 var(--color-marca-800),
+    0 2px 4px -2px rgb(3 95 158 / 0.5),
+    inset 0 1px 0 rgb(255 255 255 / 0.2);
+}
+.boton-3d-claro:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow:
+    0 0 0 1px var(--color-marca-200),
+    0 1px 0 0 var(--color-marca-200);
+}
+.boton-3d-verde:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow:
+    0 1px 0 0 #047857,
+    inset 0 1px 0 rgb(255 255 255 / 0.2);
+}
+
+/* Opción elegida: se queda hundida y en azul */
+.pulsado,
+.pulsado:active:not(:disabled) {
+  color: #fff;
+  background: linear-gradient(to bottom, var(--color-marca-600), var(--color-marca-500));
+  transform: translateY(3px);
+  box-shadow:
+    0 1px 0 0 var(--color-marca-800),
+    inset 0 2px 5px rgb(7 81 131 / 0.45);
+}
+
+/* Desactivado: plano y gris */
+.boton-3d:disabled {
+  background: var(--color-slate-300);
+  box-shadow: none;
+  cursor: not-allowed;
 }
 
 /* Barra horizontal de días sin scrollbar visible */

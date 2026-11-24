@@ -20,22 +20,17 @@ export default function Inicio() {
         <span className="mx-auto mb-4 grid size-14 place-items-center rounded-2xl bg-marca-500 text-white shadow-md max-[380px]:mb-3 max-[380px]:size-12 [@media(max-height:600px)]:hidden">
           <IconoTijeras className="size-7" />
         </span>
-        <h1 className="text-4xl font-extrabold tracking-tight text-marca-900 max-[380px]:text-[2rem] max-[380px]:leading-tight sm:text-5xl">
+        <h1 className="text-4xl font-extrabold tracking-tight text-marca-700 max-[380px]:text-[2rem] max-[380px]:leading-tight sm:text-5xl">
           {NEGOCIO.nombre}
         </h1>
         <div className="mx-auto mt-3 max-w-md space-y-1 text-xl leading-snug max-[380px]:mt-2 max-[380px]:text-lg">
-          <p className="text-marca-800">{NEGOCIO.lemas[0]}</p>
+          <p className="text-marca-700">{NEGOCIO.lemas[0]}</p>
           <p className="font-semibold text-marca-600">{NEGOCIO.lemas[1]}</p>
+          <p className="font-semibold text-marca-700">Cortes desde {formatPrecio(desde)}</p>
         </div>
         <Link
-          href="/servicios"
-          className="mt-5 inline-block rounded-full max-[380px]:mt-3 bg-white px-4 py-1.5 text-base font-bold text-marca-700 ring-1 ring-marca-200 transition hover:bg-marca-50"
-        >
-          Cortes desde {formatPrecio(desde)}
-        </Link>
-        <Link
           href="/reservar"
-          className="mt-4 flex w-full items-center justify-center gap-3 rounded-2xl bg-marca-600 px-6 py-5 max-[380px]:mt-3 max-[380px]:py-4 max-[380px]:gap-2 max-[380px]:px-4 whitespace-nowrap text-xl font-bold text-white shadow-lg shadow-marca-600/25 transition hover:bg-marca-700 active:scale-[0.98] sm:mx-auto sm:max-w-sm"
+          className="boton-3d mt-6 flex w-full items-center justify-center gap-3 whitespace-nowrap rounded-2xl px-6 py-5 text-xl font-bold max-[380px]:mt-3 max-[380px]:gap-2 max-[380px]:px-4 max-[380px]:py-4 sm:mx-auto sm:max-w-sm"
         >
           <IconoCalendario className="size-6" />
           Reservar cita
@@ -45,12 +40,12 @@ export default function Inicio() {
 
       <section className={`${VENTANA} p-6 sm:p-8`}>
         <IconoUbicacion className="mb-3 size-7 text-marca-600" />
-        <h2 className="text-lg font-bold text-marca-900">Dónde estamos</h2>
+        <h2 className="text-lg font-bold text-marca-700">Dónde estamos</h2>
         <a
           href={NEGOCIO.mapaHref}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-1 block text-marca-800 underline-offset-2 hover:underline"
+          className="mt-1 block text-marca-700 underline-offset-2 hover:underline"
         >
           {NEGOCIO.direccionLineas.map((linea) => (
             <span key={linea} className="block">
@@ -68,11 +63,11 @@ export default function Inicio() {
 
         <div className="mt-6 border-t border-marca-200/70 pt-6">
           <IconoReloj className="mb-3 size-7 text-marca-600" />
-          <h2 className="text-lg font-bold text-marca-900">Horario</h2>
-          <dl className="mt-1 space-y-3 text-marca-800">
+          <h2 className="text-lg font-bold text-marca-700">Horario</h2>
+          <dl className="mt-1 space-y-3 text-marca-700">
             {NEGOCIO.horarioTexto.map((h) => (
               <div key={h.dias}>
-                <dt className="font-semibold text-marca-900">{h.dias}:</dt>
+                <dt className="font-semibold text-marca-700">{h.dias}:</dt>
                 {h.horas.map((turno) => (
                   <dd key={turno} className="tabular-nums">
                     {turno}
