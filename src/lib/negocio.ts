@@ -8,7 +8,7 @@ export const NEGOCIO = {
   telefono: "639 72 04 01",
   telefonoHref: "+34639720401",
   horarioTexto: [
-    { dias: "Lunes a Viernes", horas: "9:30h a 14:00h y 16:30h a 20:30h" },
-    { dias: "Sábados", horas: "9:00h a 14:30h" },
+    { dias: "Lunes a Viernes", horas: ["09:30h a 14:00h", "16:30h a 20:30h"] },
+    { dias: "Sábados", horas: ["09:00h a 14:30h"] },
   ],
 };

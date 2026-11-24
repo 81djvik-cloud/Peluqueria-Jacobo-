@@ -18,7 +18,8 @@ export default function ReservarPage({ searchParams }: PageProps<"/reservar">) {
     <div className="space-y-8">
       <header>
         <h1 className="text-3xl font-extrabold tracking-tight">Reservar cita</h1>
-        <p className="mt-2 text-lg text-slate-600">Elige servicio, día y hora. Solo verás horas libres.</p>
+        <p className="mt-2 text-lg text-slate-600">Elige servicio, día y hora.</p>
+        <p className="text-lg text-slate-600">Solo verás horas libres.</p>
       </header>
       <Suspense fallback={<Cargando />}>
         <Formulario searchParams={searchParams} />
