@@ -70,3 +70,23 @@ export const IconoCasa = ({ className }: P) => (
     <path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5" />
   </svg>
 );
+/** Móvil clásico tipo Nokia: antena corta, pantalla, tecla central y teclado. */
+export const IconoMovil = ({ className }: P) => (
+  <svg {...base} strokeWidth={1.6} className={className}>
+    <path d="M15.5 4.2V1.6" />
+    <path d="M8.6 3.8h6.8a2.6 2.6 0 0 1 2.6 2.6v7.2c0 1-.4 1.6-.4 2.6v4.4a2.6 2.6 0 0 1-2.6 2.6H9a2.6 2.6 0 0 1-2.6-2.6v-4.4c0-1-.4-1.6-.4-2.6V6.4a2.6 2.6 0 0 1 2.6-2.6Z" />
+    <rect x="8.8" y="6.2" width="6.4" height="4.6" rx="0.8" />
+    <path d="M10.4 13h3.2" />
+    <g fill="currentColor" stroke="none">
+      <circle cx="9.6" cy="15.6" r="0.75" />
+      <circle cx="12" cy="15.6" r="0.75" />
+      <circle cx="14.4" cy="15.6" r="0.75" />
+      <circle cx="9.6" cy="17.8" r="0.75" />
+      <circle cx="12" cy="17.8" r="0.75" />
+      <circle cx="14.4" cy="17.8" r="0.75" />
+      <circle cx="9.6" cy="20" r="0.75" />
+      <circle cx="12" cy="20" r="0.75" />
+      <circle cx="14.4" cy="20" r="0.75" />
+    </g>
+  </svg>
+);
