@@ -35,7 +35,11 @@ export default function Inicio() {
           <IconoCalendario className="size-6" />
           Reservar cita
         </Link>
-        <p className="mt-3 text-base text-slate-600 max-[380px]:mt-2 max-[380px]:text-[0.9rem]">Sin registros. Te lleva menos de un minuto.</p>
+        <p className="mt-3 text-base text-slate-600 max-[380px]:mt-2 max-[380px]:text-[0.9rem]">
+          Sin registros. Te lleva menos
+          <br />
+          de un minuto.
+        </p>
       </section>
 
       <section className={`${VENTANA} p-6 sm:p-8`}>
