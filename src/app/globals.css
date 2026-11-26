@@ -15,6 +15,11 @@
   --color-marca-900: #0c446c;
 }
 
+/* Alto fijo de la cabecera: la portada lo usa para ocupar justo la primera pantalla. */
+:root {
+  --alto-cabecera: 4.25rem;
+}
+
 /* Letra grande: 18px de base, todo el diseño escala con rem. */
 html {
   font-size: 112.5%;

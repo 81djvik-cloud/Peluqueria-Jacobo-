@@ -26,7 +26,7 @@ function CabeceraSegunRuta() {
 function Barra({ enPortada }: { enPortada: boolean }) {
   return (
     <header className="sticky top-0 z-30 border-b border-marca-100 bg-white">
-      <div className="mx-auto grid max-w-2xl grid-cols-2 items-center gap-3 px-4 pb-4 pt-3 sm:px-6">
+      <div className="mx-auto grid h-[var(--alto-cabecera)] max-w-2xl grid-cols-2 items-center gap-3 px-4 pb-1 sm:px-6">
         <a
           href={`tel:${NEGOCIO.telefonoHref}`}
           className={`${BOTON} justify-self-start`}

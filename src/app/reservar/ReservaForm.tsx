@@ -8,6 +8,7 @@ import {
   useState,
   useSyncExternalStore,
 } from "react";
+import { useSearchParams } from "next/navigation";
 import { SERVICIOS, formatPrecio, getServicio } from "@/lib/servicios";
 import { reservarAction, type EstadoFormulario } from "./actions";
 
@@ -38,6 +39,15 @@ export function ReservaForm({
   servicioInicial: string | null;
 }) {
   const [servicioId, setServicioId] = useState<string | null>(servicioInicial);
+
+  // Next.js conserva esta pantalla en memoria entre visitas. Cada vez que se
+  // vuelve a mostrar (efecto que se ejecuta de nuevo), se marca el servicio
+  // que viene en el enlace pulsado (?servicio=…), p. ej. desde «Servicios».
+  const servicioUrl = getServicio(useSearchParams().get("servicio"))?.id;
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- sincroniza con la URL al mostrarse
+    if (servicioUrl) setServicioId(servicioUrl);
+  }, [servicioUrl]);
   const [fecha, setFecha] = useState<string | null>(dias[0]?.fecha ?? null);
   const [horaElegida, setHora] = useState<string | null>(null);
   // null = el cliente aún no ha escrito nada: usamos lo recordado de la última vez.
@@ -273,17 +283,24 @@ export function ReservaForm({
             {estado.error}
           </p>
         )}
-        <p className="mb-3 min-h-[1.5em] text-base text-slate-600" aria-live="polite">
+        <div className="mb-3 min-h-[3em] text-base leading-normal" aria-live="polite">
           {servicio ? (
             <>
-              <span className="font-bold text-marca-700">{servicio.nombre}</span>
-              {diaElegido && <> · {diaElegido.etiqueta} {diaElegido.dia} {diaElegido.mes}</>}
-              {hora && <> · {hora} h</>} · {formatPrecio(servicio.precio)}
+              <p className="truncate font-bold text-marca-700">{servicio.nombre}</p>
+              <p className="truncate text-slate-600">
+                {[
+                  diaElegido && `${diaElegido.etiqueta} ${diaElegido.dia} ${diaElegido.mes}`,
+                  hora && `${hora} h`,
+                  formatPrecio(servicio.precio),
+                ]
+                  .filter(Boolean)
+                  .join(" · ")}
+              </p>
             </>
           ) : (
-            "Elige un servicio para empezar."
+            <p className="text-slate-600">Elige un servicio para empezar.</p>
           )}
-        </p>
+        </div>
         <button
           type="submit"
           disabled={!listo || enviando}

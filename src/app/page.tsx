@@ -4,7 +4,7 @@ import { SERVICIOS, formatPrecio } from "@/lib/servicios";
 import {
   IconoCalendario,
   IconoReloj,
-  IconoTelefono,
+  IconoMovilTapa,
   IconoTijeras,
   IconoUbicacion,
 } from "@/components/Iconos";
@@ -16,26 +16,29 @@ export default function Inicio() {
   const desde = SERVICIOS[0].precio;
   return (
     <div className="space-y-8">
-      <section className={`${VENTANA} px-5 py-7 text-center max-[380px]:py-5 sm:px-10 sm:py-10`}>
-        <span className="mx-auto mb-4 grid size-14 place-items-center rounded-2xl bg-marca-500 text-white shadow-md max-[380px]:mb-3 max-[380px]:size-12 [@media(max-height:600px)]:hidden">
-          <IconoTijeras className="size-7" />
+      {/* Ocupa justo la primera pantalla: alto visible − cabecera − margen superior */}
+      <section
+        className={`${VENTANA} flex min-h-[calc(100svh_-_var(--alto-cabecera)_-_1px_-_2.25rem)] flex-col items-center justify-center px-5 py-7 text-center max-[380px]:py-5 sm:px-10 sm:py-10`}
+      >
+        <span className="mx-auto mb-4 grid size-14 place-items-center rounded-2xl bg-marca-500 text-white shadow-md max-[380px]:mb-3 max-[380px]:size-12 [@media(max-height:600px)]:hidden [@media(min-height:760px)]:mb-7 [@media(min-height:760px)]:size-20 [@media(min-height:760px)]:rounded-3xl">
+          <IconoTijeras className="size-7 [@media(min-height:760px)]:size-10" />
         </span>
-        <h1 className="text-4xl font-extrabold tracking-tight text-marca-700 max-[380px]:text-[2rem] max-[380px]:leading-tight sm:text-5xl">
+        <h1 className="text-4xl font-extrabold tracking-tight text-marca-700 max-[380px]:text-[2rem] max-[380px]:leading-tight sm:text-5xl [@media(min-height:760px)]:text-5xl">
           {NEGOCIO.nombre}
         </h1>
-        <div className="mx-auto mt-3 max-w-md space-y-1 text-xl leading-snug max-[380px]:mt-2 max-[380px]:text-lg">
+        <div className="mx-auto mt-3 max-w-md space-y-1 text-xl leading-snug max-[380px]:mt-2 max-[380px]:text-lg [@media(min-height:760px)]:mt-6 [@media(min-height:760px)]:space-y-2 [@media(min-height:760px)]:text-[1.35rem]">
           <p className="text-marca-700">{NEGOCIO.lemas[0]}</p>
           <p className="font-semibold text-marca-600">{NEGOCIO.lemas[1]}</p>
           <p className="font-semibold text-marca-700">Cortes desde {formatPrecio(desde)}</p>
         </div>
         <Link
           href="/reservar"
-          className="boton-3d mt-6 flex w-full items-center justify-center gap-3 whitespace-nowrap rounded-2xl px-6 py-5 text-xl font-bold max-[380px]:mt-3 max-[380px]:gap-2 max-[380px]:px-4 max-[380px]:py-4 sm:mx-auto sm:max-w-sm"
+          className="boton-3d mt-6 flex w-full items-center justify-center gap-3 whitespace-nowrap rounded-2xl px-6 py-5 text-xl font-bold max-[380px]:mt-3 max-[380px]:gap-2 max-[380px]:px-4 max-[380px]:py-4 sm:mx-auto sm:max-w-sm [@media(min-height:760px)]:mt-10 [@media(min-height:760px)]:py-7 [@media(min-height:760px)]:text-2xl"
         >
-          <IconoCalendario className="size-6" />
+          <IconoCalendario className="size-6 [@media(min-height:760px)]:size-7" />
           Reservar cita
         </Link>
-        <p className="mt-3 text-base text-slate-600 max-[380px]:mt-2 max-[380px]:text-[0.9rem]">
+        <p className="mt-3 text-base text-slate-600 max-[380px]:mt-2 max-[380px]:text-[0.9rem] [@media(min-height:760px)]:mt-5 [@media(min-height:760px)]:text-lg">
           Sin registros. Te lleva menos
           <br />
           de un minuto.
@@ -61,7 +64,7 @@ export default function Inicio() {
           href={`tel:${NEGOCIO.telefonoHref}`}
           className="mt-3 inline-flex items-center gap-2 font-bold text-marca-700"
         >
-          <IconoTelefono className="size-5" />
+          <IconoMovilTapa className="size-6" />
           {NEGOCIO.telefono}
         </a>
 

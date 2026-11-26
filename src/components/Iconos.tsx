@@ -90,3 +90,24 @@ export const IconoMovil = ({ className }: P) => (
     </g>
   </svg>
 );
+/** Móvil antiguo de tapa (tipo Motorola) abierto: tapa con pantalla, bisagra y teclado. */
+export const IconoMovilTapa = ({ className }: P) => (
+  <svg {...base} strokeWidth={1.6} className={className}>
+    <path d="M9.2 3.4V1.2" />
+    <rect x="7.6" y="3.4" width="8.8" height="8.6" rx="1.8" />
+    <rect x="9.3" y="5.1" width="5.4" height="4" rx="0.6" />
+    <path d="M6.6 12.8h10.8" />
+    <path d="M6.6 12.8v7.4a2.2 2.2 0 0 0 2.2 2.2h6.4a2.2 2.2 0 0 0 2.2-2.2v-7.4" />
+    <g fill="currentColor" stroke="none">
+      <circle cx="9.6" cy="15.2" r="0.75" />
+      <circle cx="12" cy="15.2" r="0.75" />
+      <circle cx="14.4" cy="15.2" r="0.75" />
+      <circle cx="9.6" cy="17.4" r="0.75" />
+      <circle cx="12" cy="17.4" r="0.75" />
+      <circle cx="14.4" cy="17.4" r="0.75" />
+      <circle cx="9.6" cy="19.6" r="0.75" />
+      <circle cx="12" cy="19.6" r="0.75" />
+      <circle cx="14.4" cy="19.6" r="0.75" />
+    </g>
+  </svg>
+);

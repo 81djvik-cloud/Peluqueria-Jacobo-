@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+import { ArribaAlNavegar } from "@/components/ArribaAlNavegar";
 import { Cabecera } from "@/components/Cabecera";
 import { Pie } from "@/components/Pie";
 import { NEGOCIO } from "@/lib/negocio";
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="es" className={`${jakarta.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col font-sans">
+        <ArribaAlNavegar />
         <Cabecera />
         <main className="mx-auto w-full max-w-2xl flex-1 px-5 pb-16 pt-6 sm:px-6">
           {children}
