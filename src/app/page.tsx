@@ -4,7 +4,7 @@ import { SERVICIOS, formatPrecio } from "@/lib/servicios";
 import {
   IconoCalendario,
   IconoReloj,
-  IconoMovilTapa,
+  IconoSmartphone,
   IconoTijeras,
   IconoUbicacion,
 } from "@/components/Iconos";
@@ -64,7 +64,7 @@ export default function Inicio() {
           href={`tel:${NEGOCIO.telefonoHref}`}
           className="mt-3 inline-flex items-center gap-2 font-bold text-marca-700"
         >
-          <IconoMovilTapa className="size-6" />
+          <IconoSmartphone className="size-6" />
           {NEGOCIO.telefono}
         </a>
 
