@@ -22,18 +22,20 @@ export async function AgendaSheets() {
     { nombre: "App Store", href: APP_STORE, mostrar: esIOS || !esAndroid },
   ].filter((t) => t.mostrar);
 
+  // Vista previa corta: la fórmula completa (con la clave) se copia con el botón.
+  const vistaPrevia = `=IMPORTDATA("…/api/agenda?clave=…")`;
+
   return (
-    <section className="space-y-4 rounded-2xl bg-white p-5 ring-1 ring-slate-200">
+    <section className="space-y-3 rounded-2xl bg-white p-5 ring-1 ring-slate-200">
       <div>
         <h2 className="text-xl font-bold">Copia de la agenda en Google Sheets</h2>
-        <p className="mt-1 text-base text-slate-600">
-          Una hoja de cálculo con las citas pendientes que se actualiza sola. Siempre es la misma
-          hoja: no hay que descargar nada.
+        <p className="text-base text-slate-600 [@media(max-height:700px)]:hidden">
+          Las citas pendientes en una hoja que se actualiza sola.
         </p>
       </div>
 
-      <div className="space-y-3 rounded-xl bg-marca-50 p-4 ring-1 ring-marca-100">
-        <p className="text-base font-semibold">¿Es la primera vez? Instala gratis Google Sheets en tu móvil:</p>
+      <div className="space-y-2 rounded-xl bg-marca-50 p-3 ring-1 ring-marca-100">
+        <p className="text-base font-semibold">¿Es la primera vez? Instala gratis Google Sheets:</p>
         <div className={`grid gap-3 ${tiendas.length > 1 ? "grid-cols-2" : ""}`}>
           {tiendas.map((t) => (
             <a
@@ -41,27 +43,30 @@ export async function AgendaSheets() {
               href={t.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="boton-3d-claro flex items-center justify-center rounded-xl px-3 py-3 text-base font-bold"
+              className="boton-3d-claro flex items-center justify-center rounded-xl px-3 py-2.5 text-base font-bold"
             >
               {t.nombre}
             </a>
           ))}
         </div>
         <p className="text-sm text-slate-600">
-          Necesitas una cuenta de Google (la misma de Gmail). También funciona sin instalar nada
-          entrando en <span className="font-semibold">sheets.google.com</span> desde el navegador.
+          Necesitas cuenta de Google · o usa <span className="font-semibold">sheets.google.com</span>
         </p>
       </div>
 
-      <ol className="list-decimal space-y-1 pl-5 text-base">
+      <ol className="list-decimal space-y-0.5 pl-5 text-base">
         <li>Abre Google Sheets y crea una hoja en blanco.</li>
-        <li>Toca la celda A1 y pega esta fórmula:</li>
+        <li>Toca la celda A1 y pega la fórmula:</li>
       </ol>
-      <p className="break-all rounded-xl bg-slate-50 p-3 font-mono text-sm text-slate-700 ring-1 ring-slate-200">
-        {formula}
+      <p
+        title={formula}
+        className="truncate rounded-xl bg-slate-50 px-3 py-2 font-mono text-sm text-slate-700 ring-1 ring-slate-200"
+      >
+        {vistaPrevia}
       </p>
       <BotonCopiar texto={formula} />
-      <ol start={3} className="list-decimal space-y-1 pl-5 text-base">
+
+      <ol start={3} className="list-decimal pl-5 pt-1 text-base">
         <li>Espera unos segundos: aparecerán las citas pendientes y se irán actualizando solas.</li>
       </ol>
 

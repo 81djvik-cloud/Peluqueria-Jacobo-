@@ -80,6 +80,17 @@ export function ReservaForm({
         setHora(null);
         setVersion((v) => v + 1);
         refHoras.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else if (res.error) {
+        // El aviso aparece en la barra inferior y la hace crecer: bajamos hasta el
+        // final para que la barra quede en su sitio y no tape nombre ni teléfono.
+        setTimeout(() => {
+          window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "smooth" });
+          if (res.campo === "nombre" || res.campo === "telefono") {
+            document.querySelector<HTMLInputElement>(`input[name="${res.campo}"]`)?.focus({
+              preventScroll: true,
+            });
+          }
+        }, 60);
       }
       return res;
     },
