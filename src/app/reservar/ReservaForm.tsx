@@ -8,7 +8,9 @@ import {
   useState,
   useSyncExternalStore,
 } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { NEGOCIO } from "@/lib/negocio";
 import { SERVICIOS, formatPrecio, getServicio } from "@/lib/servicios";
 import { reservarAction, type EstadoFormulario } from "./actions";
 
@@ -273,15 +275,37 @@ export function ReservaForm({
               className="w-full rounded-xl border-0 bg-white px-4 py-4 text-lg ring-1 ring-slate-300 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-marca-500 aria-[invalid=true]:ring-red-500"
             />
           </label>
+          {/* Trampa para robots: invisible para las personas, los robots suelen rellenarla */}
+          <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
+            <label>
+              Web
+              <input name="web" type="text" tabIndex={-1} autoComplete="off" defaultValue="" />
+            </label>
+          </div>
+          <p className="text-sm leading-relaxed text-slate-500">
+            Usamos tu nombre y teléfono solo para gestionar tu cita. No los compartimos y se borran
+            a los 3 meses.{" "}
+            <Link href="/privacidad" className="font-semibold text-marca-700 underline underline-offset-2">
+              Más información
+            </Link>
+          </p>
         </div>
       </Paso>
 
       {/* Confirmación fija abajo */}
       <div className="sticky bottom-0 -mx-5 border-t border-marca-100 bg-white/95 px-5 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 backdrop-blur sm:mx-0 sm:rounded-2xl sm:border sm:px-5">
         {estado.error && (
-          <p role="alert" className="mb-3 rounded-xl bg-red-50 px-4 py-3 text-base font-semibold text-red-700">
-            {estado.error}
-          </p>
+          <div role="alert" className="mb-3 rounded-xl bg-red-50 px-4 py-3 text-base font-semibold text-red-700">
+            <p>{estado.error}</p>
+            {estado.llamar && (
+              <a
+                href={`tel:${NEGOCIO.telefonoHref}`}
+                className="boton-3d mt-3 flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-base font-bold"
+              >
+                Llamar al {NEGOCIO.telefono}
+              </a>
+            )}
+          </div>
         )}
         <div className="mb-3 min-h-[3em] text-base leading-normal" aria-live="polite">
           {servicio ? (

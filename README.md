@@ -52,12 +52,38 @@ La tabla también se crea sola en la primera petición si no existe.
 3. En **Settings → Environment Variables** añade:
    - `ADMIN_PASSWORD`: la contraseña del panel.
    - `SESSION_SECRET`: una cadena larga aleatoria (por ejemplo, `openssl rand -base64 32`).
-4. Despliega. Para cargar los datos de ejemplo en la base de datos de producción (opcional), desde tu ordenador:
+4. Despliega. La tabla se crea sola en la primera visita.
 
-   ```bash
-   vercel env pull .env.local
-   npm run db:seed
-   ```
+> ⚠️ `npm run db:seed` es **solo para pruebas en local**. Si `DATABASE_URL` no es local, el script se niega a
+> actuar (salvo `PERMITIR_DATOS_EJEMPLO=si`), y `--reset` contra una base de datos no local exige además
+> `CONFIRMAR_BORRADO=BORRAR-TODAS-LAS-CITAS`. Nunca lo uses con la agenda real.
+
+## Seguridad
+
+- Contraseña del panel comparada de forma segura; sesión en cookie firmada (httpOnly, 30 días).
+- **5 intentos fallidos → bloqueo de 15 minutos** por conexión.
+- **Máximo 2 citas pendientes por teléfono** y **2 reservas por hora desde la misma conexión**; al superarlo se
+  invita a llamar. Trampa invisible para robots. Límites en `src/lib/seguridad.ts`.
+- Consultas parametrizadas (sin inyección SQL), validación en el servidor y restricción en la base de datos que
+  impide dobles reservas.
+- Cabeceras de seguridad (`next.config.ts`): sin incrustación en otras webs, `nosniff`, HSTS…
+- Las IP nunca se guardan en claro (solo una huella cifrada).
+- Recomendado: verificación en dos pasos en GitHub, Vercel, Neon y Google; contraseña del panel de 16+ caracteres;
+  repositorio privado.
+
+## Privacidad (RGPD)
+
+Aviso bajo el formulario y página `/privacidad`. Las citas se **borran solas a los 3 meses**
+(`MESES_CONSERVACION` en `src/lib/reservas.ts`). Completa los datos del titular en `NEGOCIO.legal`
+(`src/lib/negocio.ts`). La página es una plantilla; conviene que la revise un asesor.
+
+## Copias y recuperación
+
+- **Neon** guarda un historial que permite restaurar la base de datos a un momento anterior (la duración depende
+  del plan). Se hace desde la consola de Neon.
+- **Agenda en Google Sheets:** en el panel hay una fórmula `=IMPORTDATA(...)` con un enlace privado que devuelve las
+  citas pendientes. Pegada en una hoja de Google, se actualiza sola (Google refresca más o menos cada hora). También
+  hay un botón para descargarla en CSV. El enlace cambia si cambias `SESSION_SECRET`.
 
 Variables de entorno: `DATABASE_URL` (o `POSTGRES_URL`), `ADMIN_PASSWORD`, `SESSION_SECRET` (opcional; si falta se usa `ADMIN_PASSWORD`).
 

@@ -14,7 +14,28 @@ if (!url) {
   console.error("Falta DATABASE_URL. Ponla en .env.local o en el entorno.");
   process.exit(1);
 }
-const sql = postgres(url, { prepare: false, max: 1 });
+// --- Protección: este script es solo para pruebas -------------------------
+// Si la base de datos no es la local, se niega a actuar salvo permiso explícito,
+// y para borrar (--reset) exige además una confirmación escrita.
+const host = (() => {
+  try {
+    return new URL(url).hostname;
+  } catch {
+    return "";
+  }
+})();
+const esLocal = ["localhost", "127.0.0.1", "::1"].includes(host);
+const reset = process.argv.includes("--reset");
+if (!esLocal && process.env.PERMITIR_DATOS_EJEMPLO !== "si") {
+  console.error(
+    `✋ La base de datos (${host || "desconocida"}) no es la local de pruebas.\n` +
+      "   Este script solo carga datos de EJEMPLO y no debe usarse con la agenda real.\n" +
+      "   Si de verdad quieres hacerlo, añade PERMITIR_DATOS_EJEMPLO=si.",
+  );
+  process.exit(1);
+}
+
+const sql = postgres(url, { prepare: false, max: 1, onnotice: () => {} });
 
 const CLIENTES: [string, string][] = [
   ["Javier Martín", "612 345 678"],
@@ -49,9 +70,19 @@ const AGENDA: [string, string][][] = [
 async function main() {
   for (const q of SCHEMA_SQL) await sql.unsafe(q);
 
-  if (process.argv.includes("--reset")) {
+  if (reset) {
+    const [{ total }] = await sql<{ total: number }[]>`SELECT count(*)::int AS total FROM reservas`;
+    if (!esLocal && process.env.CONFIRMAR_BORRADO !== "BORRAR-TODAS-LAS-CITAS") {
+      console.error(
+        `✋ --reset borraría las ${total} citas de una base de datos que NO es la local.\n` +
+          "   No se ha borrado nada. Si de verdad quieres hacerlo, añade\n" +
+          "   CONFIRMAR_BORRADO=BORRAR-TODAS-LAS-CITAS",
+      );
+      process.exitCode = 1;
+      return;
+    }
     await sql`TRUNCATE reservas`;
-    console.log("Tabla vaciada.");
+    console.log(`Tabla vaciada (${total} citas borradas).`);
   } else {
     const [{ n }] = await sql<{ n: number }[]>`SELECT count(*)::int AS n FROM reservas`;
     if (n > 0) {

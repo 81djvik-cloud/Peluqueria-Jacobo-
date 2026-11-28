@@ -98,3 +98,9 @@ export const IconoSmartphone = ({ className }: P) => (
     <path d="M10 19.2h4" />
   </svg>
 );
+export const IconoCamara = ({ className }: P) => (
+  <svg {...base} className={className}>
+    <path d="M14.5 4h-5L7.5 6.5H5A2 2 0 0 0 3 8.5v9A2 2 0 0 0 5 19.5h14a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-2.5Z" />
+    <circle cx="12" cy="13" r="3.5" />
+  </svg>
+);

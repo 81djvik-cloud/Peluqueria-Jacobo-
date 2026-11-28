@@ -29,4 +29,16 @@ export const SCHEMA_SQL = [
       WHERE (estado <> 'cancelada')
   )`,
   `CREATE INDEX IF NOT EXISTS reservas_inicio_idx ON reservas (inicio)`,
+  // Huella (hash) de la conexión que hizo la reserva, para limitar reservas en serie.
+  // Nunca se guarda la IP en claro.
+  `ALTER TABLE reservas ADD COLUMN IF NOT EXISTS origen text`,
+  `CREATE INDEX IF NOT EXISTS reservas_origen_idx ON reservas (origen, creada_en)`,
+  `CREATE INDEX IF NOT EXISTS reservas_telefono_idx ON reservas (cliente_telefono, fin)`,
+  // Intentos fallidos de contraseña del panel, por huella de conexión.
+  `CREATE TABLE IF NOT EXISTS intentos_acceso (
+    clave text PRIMARY KEY,
+    fallos integer NOT NULL DEFAULT 0,
+    bloqueado_hasta timestamptz,
+    actualizado timestamptz NOT NULL DEFAULT now()
+  )`,
 ];

@@ -21,6 +21,7 @@ function crearCliente() {
     idle_timeout: 20,
     // Compatible con el pooler de Neon (PgBouncer en modo transacción).
     prepare: false,
+    onnotice: () => {}, // silencia avisos como «la tabla ya existe»
   });
 }
 

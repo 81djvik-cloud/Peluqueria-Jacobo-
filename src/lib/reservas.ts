@@ -1,6 +1,7 @@
 import "server-only";
 import { db } from "./db";
 import { horaAMinutos, minutosAHora, type Ocupado } from "./horario";
+import { MAX_CITAS_POR_TELEFONO, MAX_RESERVAS_POR_CONEXION_HORA } from "./seguridad";
 import type { Servicio } from "./servicios";
 
 export type EstadoReserva = "pendiente" | "atendida" | "cancelada";
@@ -67,6 +68,10 @@ export async function ocupadosDelDia(fecha: string): Promise<Ocupado[]> {
 }
 
 export class HoraOcupadaError extends Error {}
+/** El teléfono ya tiene el máximo de citas pendientes. */
+export class LimiteTelefonoError extends Error {}
+/** Demasiadas reservas desde la misma conexión en la última hora. */
+export class LimiteConexionError extends Error {}
 
 export async function crearReserva(datos: {
   servicio: Servicio;
@@ -74,21 +79,44 @@ export async function crearReserva(datos: {
   minutos: number;
   nombre: string;
   telefono: string;
+  origen: string;
 }): Promise<string> {
   const sql = await db();
   const inicio = `${datos.fecha} ${minutosAHora(datos.minutos)}:00`;
   const fin = `${datos.fecha} ${minutosAHora(datos.minutos + datos.servicio.duracion)}:00`;
   try {
-    const [fila] = await sql<{ id: string }[]>`
-      INSERT INTO reservas
-        (servicio_id, servicio_nombre, precio, duracion_min, inicio, fin, cliente_nombre, cliente_telefono)
-      VALUES
-        (${datos.servicio.id}, ${datos.servicio.nombre}, ${datos.servicio.precio},
-         ${datos.servicio.duracion}, ${inicio}::timestamp, ${fin}::timestamp,
-         ${datos.nombre}, ${datos.telefono})
-      RETURNING id
-    `;
-    return fila.id;
+    return await sql.begin(async (tx) => {
+      // Serializa las reservas del mismo teléfono y de la misma conexión para
+      // que dos envíos simultáneos no se salten los límites.
+      await tx`SELECT pg_advisory_xact_lock(hashtext(${"tel:" + datos.telefono}))`;
+      await tx`SELECT pg_advisory_xact_lock(hashtext(${"org:" + datos.origen}))`;
+
+      const [{ pendientes }] = await tx<{ pendientes: number }[]>`
+        SELECT count(*)::int AS pendientes FROM reservas
+        WHERE cliente_telefono = ${datos.telefono}
+          AND estado = 'pendiente'
+          AND fin > (now() AT TIME ZONE 'Europe/Madrid')
+      `;
+      if (pendientes >= MAX_CITAS_POR_TELEFONO) throw new LimiteTelefonoError();
+
+      const [{ recientes }] = await tx<{ recientes: number }[]>`
+        SELECT count(*)::int AS recientes FROM reservas
+        WHERE origen = ${datos.origen} AND creada_en > now() - interval '1 hour'
+      `;
+      if (recientes >= MAX_RESERVAS_POR_CONEXION_HORA) throw new LimiteConexionError();
+
+      const [fila] = await tx<{ id: string }[]>`
+        INSERT INTO reservas
+          (servicio_id, servicio_nombre, precio, duracion_min, inicio, fin,
+           cliente_nombre, cliente_telefono, origen)
+        VALUES
+          (${datos.servicio.id}, ${datos.servicio.nombre}, ${datos.servicio.precio},
+           ${datos.servicio.duracion}, ${inicio}::timestamp, ${fin}::timestamp,
+           ${datos.nombre}, ${datos.telefono}, ${datos.origen})
+        RETURNING id
+      `;
+      return fila.id;
+    });
   } catch (e) {
     // 23P01 = exclusion_violation: otra reserva ocupa ya ese hueco.
     if ((e as { code?: string }).code === "23P01") throw new HoraOcupadaError();
@@ -123,7 +151,16 @@ export async function autoMarcarAtendidas(): Promise<void> {
     WHERE estado = 'pendiente'
       AND fin <= (now() AT TIME ZONE 'Europe/Madrid')
   `;
+  // Privacidad (RGPD): las citas se conservan solo MESES_CONSERVACION meses.
+  await sql`
+    DELETE FROM reservas
+    WHERE fin < (now() AT TIME ZONE 'Europe/Madrid') - make_interval(months => ${MESES_CONSERVACION})
+  `;
+  await sql`DELETE FROM intentos_acceso WHERE actualizado < now() - interval '1 day'`;
 }
+
+/** Meses que se guardan las citas antes de borrarse automáticamente. */
+export const MESES_CONSERVACION = 3;
 
 /** Reservas de un día ordenadas por hora. */
 export async function reservasDelDia(fecha: string): Promise<Reserva[]> {
@@ -146,4 +183,17 @@ export async function cambiarEstado(id: string, estado: "atendida" | "cancelada"
     SET estado = ${estado}, atendida_auto = false, actualizada_en = now()
     WHERE id = ${id} AND estado = 'pendiente'
   `;
+}
+
+/** Citas pendientes (aún no han terminado), ordenadas por fecha y hora. */
+export async function citasPendientes(): Promise<Reserva[]> {
+  await autoMarcarAtendidas();
+  const sql = await db();
+  const filas = await sql<Fila[]>`
+    SELECT ${sql.unsafe(COLUMNAS)}
+    FROM reservas
+    WHERE estado = 'pendiente' AND fin > (now() AT TIME ZONE 'Europe/Madrid')
+    ORDER BY inicio
+  `;
+  return filas.map(aReserva);
 }

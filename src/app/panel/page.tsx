@@ -17,6 +17,7 @@ import { reservasDelDia, type Reserva } from "@/lib/reservas";
 import { formatPrecio } from "@/lib/servicios";
 import { IconoFlecha, IconoFlechaIzq, IconoTelefono } from "@/components/Iconos";
 import { AccionesReserva } from "./AccionesReserva";
+import { AgendaSheets } from "./AgendaSheets";
 import { Autorefresco } from "./Autorefresco";
 import { logoutAction } from "./actions";
 
@@ -123,6 +124,7 @@ async function Panel({ searchParams }: Pick<PageProps<"/panel">, "searchParams">
       <p className="text-center text-sm text-slate-500">
         Las citas se marcan como atendidas automáticamente al terminar su hora prevista (hora de Madrid).
       </p>
+      <AgendaSheets />
     </div>
   );
 }

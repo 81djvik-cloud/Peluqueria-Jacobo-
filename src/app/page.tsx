@@ -1,13 +1,19 @@
+import Image from "next/image";
 import Link from "next/link";
 import { NEGOCIO } from "@/lib/negocio";
 import { SERVICIOS, formatPrecio } from "@/lib/servicios";
+import { EnlacesPie } from "@/components/Pie";
 import {
   IconoCalendario,
+  IconoCamara,
   IconoReloj,
   IconoSmartphone,
   IconoTijeras,
   IconoUbicacion,
 } from "@/components/Iconos";
+
+/** Alto de una pantalla completa: alto visible − cabecera − margen superior. */
+const PANTALLA = "min-h-[calc(100svh_-_var(--alto-cabecera)_-_1px_-_2.25rem)]";
 
 const VENTANA =
   "rounded-3xl bg-gradient-to-br from-marca-100 via-marca-50 to-white shadow-sm ring-1 ring-marca-100";
@@ -18,7 +24,7 @@ export default function Inicio() {
     <div className="space-y-8">
       {/* Ocupa justo la primera pantalla: alto visible − cabecera − margen superior */}
       <section
-        className={`${VENTANA} flex min-h-[calc(100svh_-_var(--alto-cabecera)_-_1px_-_2.25rem)] flex-col items-center justify-center px-5 py-7 text-center max-[380px]:py-5 sm:px-10 sm:py-10`}
+        className={`${VENTANA} ${PANTALLA} flex flex-col items-center justify-center px-5 py-7 text-center max-[380px]:py-5 sm:px-10 sm:py-10`}
       >
         <span className="mx-auto mb-4 grid size-14 place-items-center rounded-2xl bg-marca-500 text-white shadow-md max-[380px]:mb-3 max-[380px]:size-12 [@media(max-height:600px)]:hidden [@media(min-height:760px)]:mb-7 [@media(min-height:760px)]:size-20 [@media(min-height:760px)]:rounded-3xl">
           <IconoTijeras className="size-7 [@media(min-height:760px)]:size-10" />
@@ -45,7 +51,7 @@ export default function Inicio() {
         </p>
       </section>
 
-      <section className={`${VENTANA} p-6 sm:p-8`}>
+      <section className={`${VENTANA} ${PANTALLA} flex flex-col justify-center p-6 sm:p-8`}>
         <IconoUbicacion className="mb-3 size-7 text-marca-600" />
         <h2 className="text-lg font-bold text-marca-700">Dónde estamos</h2>
         <a
@@ -83,6 +89,44 @@ export default function Inicio() {
               </div>
             ))}
           </dl>
+        </div>
+      </section>
+
+      {/* Tercera pantalla: fotos del local + enlaces discretos */}
+      <section className={`${VENTANA} ${PANTALLA} flex flex-col justify-between gap-6 p-6 sm:p-8`}>
+        <div>
+          <IconoCamara className="mb-3 size-7 text-marca-600" />
+          <h2 className="text-lg font-bold text-marca-700">Nuestro local</h2>
+          <p className="text-slate-600">Así es la peluquería por dentro.</p>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          {Array.from({ length: 4 }).map((_, i) => {
+            const foto = NEGOCIO.fotos[i];
+            return (
+              <div
+                key={i}
+                className="relative aspect-square overflow-hidden rounded-2xl bg-white/70 ring-1 ring-marca-200"
+              >
+                {foto ? (
+                  <Image
+                    src={foto.src}
+                    alt={foto.alt}
+                    fill
+                    sizes="(max-width: 640px) 45vw, 300px"
+                    className="object-cover"
+                  />
+                ) : (
+                  <div className="flex h-full flex-col items-center justify-center gap-2 px-2 text-center text-marca-400">
+                    <IconoCamara className="size-8" />
+                    <span className="text-sm font-semibold leading-tight max-[380px]:text-xs">Foto<br />próximamente</span>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+        <div className="border-t border-marca-200/70 pt-4">
+          <EnlacesPie />
         </div>
       </section>
     </div>
