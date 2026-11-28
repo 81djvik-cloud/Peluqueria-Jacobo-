@@ -69,6 +69,7 @@ export function ReservaForm({
   const telefono = telefonoEditado ?? guardado.telefono ?? "";
 
   const refDatos = useRef<HTMLElement>(null);
+  const refFormulario = useRef<HTMLFormElement>(null);
   const refHoras = useRef<HTMLElement>(null);
   const servicio = getServicio(servicioId);
 
@@ -81,10 +82,16 @@ export function ReservaForm({
         setVersion((v) => v + 1);
         refHoras.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       } else if (res.error) {
-        // El aviso aparece en la barra inferior y la hace crecer: bajamos hasta el
-        // final para que la barra quede en su sitio y no tape nombre ni teléfono.
+        // El aviso aparece en la barra inferior y la hace crecer. Encuadramos la
+        // pantalla para que la barra quede justo en el borde inferior (en su sitio
+        // natural, al final del formulario): así no tapa nombre ni teléfono y no
+        // asoma el pie de página por debajo.
         setTimeout(() => {
-          window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "smooth" });
+          const form = refFormulario.current;
+          const objetivo = form
+            ? form.getBoundingClientRect().bottom + window.scrollY - window.innerHeight
+            : document.documentElement.scrollHeight;
+          window.scrollTo({ top: Math.max(0, Math.round(objetivo)), behavior: "smooth" });
           if (res.campo === "nombre" || res.campo === "telefono") {
             document.querySelector<HTMLInputElement>(`input[name="${res.campo}"]`)?.focus({
               preventScroll: true,
@@ -164,7 +171,7 @@ export function ReservaForm({
   }
 
   return (
-    <form action={accion} onSubmit={alEnviar} className="space-y-10" noValidate>
+    <form ref={refFormulario} action={accion} onSubmit={alEnviar} className="space-y-10" noValidate>
       <input type="hidden" name="servicio" value={servicioId ?? ""} />
       <input type="hidden" name="fecha" value={fecha ?? ""} />
       <input type="hidden" name="hora" value={hora ?? ""} />
