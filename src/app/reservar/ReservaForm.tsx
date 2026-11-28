@@ -10,7 +10,6 @@ import {
 } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { NEGOCIO } from "@/lib/negocio";
 import { SERVICIOS, formatPrecio, getServicio } from "@/lib/servicios";
 import { reservarAction, type EstadoFormulario } from "./actions";
 
@@ -297,14 +296,6 @@ export function ReservaForm({
         {estado.error && (
           <div role="alert" className="mb-3 rounded-xl bg-red-50 px-4 py-3 text-base font-semibold text-red-700">
             <p>{estado.error}</p>
-            {estado.llamar && (
-              <a
-                href={`tel:${NEGOCIO.telefonoHref}`}
-                className="boton-3d mt-3 flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-base font-bold"
-              >
-                Llamar al {NEGOCIO.telefono}
-              </a>
-            )}
           </div>
         )}
         <div className="mb-3 min-h-[3em] text-base leading-normal" aria-live="polite">

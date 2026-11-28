@@ -9,7 +9,6 @@ import {
   crearReserva,
   ocupadosDelDia,
 } from "@/lib/reservas";
-import { NEGOCIO } from "@/lib/negocio";
 import { MAX_CITAS_POR_TELEFONO, MAX_RESERVAS_POR_CONEXION_HORA, huellaConexion } from "@/lib/seguridad";
 import { getServicio } from "@/lib/servicios";
 import { normalizarTelefono } from "@/lib/telefono";
@@ -18,8 +17,6 @@ export type EstadoFormulario = {
   error: string | null;
   campo?: "servicio" | "fecha" | "hora" | "nombre" | "telefono";
   horaOcupada?: boolean;
-  /** Se ha alcanzado un límite: mostrar el teléfono para llamar. */
-  llamar?: boolean;
 };
 
 export async function reservarAction(
@@ -68,14 +65,12 @@ export async function reservarAction(
   } catch (e) {
     if (e instanceof LimiteTelefonoError) {
       return {
-        error: `Ya tienes ${MAX_CITAS_POR_TELEFONO} citas pendientes. Para reservar otra, llámanos al ${NEGOCIO.telefono}.`,
-        llamar: true,
+        error: `Ya tienes ${MAX_CITAS_POR_TELEFONO} citas pendientes. Para reservar otra, pulsa «Llamar».`,
       };
     }
     if (e instanceof LimiteConexionError) {
       return {
-        error: `Ya se han hecho ${MAX_RESERVAS_POR_CONEXION_HORA} reservas desde esta conexión en la última hora. Si necesitas otra, llámanos al ${NEGOCIO.telefono}.`,
-        llamar: true,
+        error: `Ya se han hecho ${MAX_RESERVAS_POR_CONEXION_HORA} reservas desde esta conexión en la última hora. Si necesitas otra, pulsa «Llamar».`,
       };
     }
     if (e instanceof HoraOcupadaError) {
